@@ -74,7 +74,7 @@ export async function listSavedBooks(): Promise<SavedBook[]> {
     if (!m) continue;
     const res = await cache.match(req);
     out.push({
-      slug: decodeURIComponent(m[1]),
+      slug: decodeURIComponent(m[1] ?? ""),
       size: Number(res?.headers.get("X-Size") ?? 0),
       savedAt: res?.headers.get("X-Saved-At") ?? "",
     });

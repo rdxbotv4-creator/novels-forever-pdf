@@ -18,7 +18,7 @@ type Status =
 const pageKey = (slug: string) => `nf-book-page-${slug}`;
 
 /** Urdu books read right-to-left: the next page is to the left. */
-export default function BookReader({ slug, title, author }: { slug: string; title: string; author?: string }) {
+export default function BookReader({ slug, title, author }: { slug: string; title: string; author?: string | undefined }) {
   const [status, setStatus] = useState<Status>({ kind: "loading", progress: 0 });
   const [doc, setDoc] = useState<PDFDocumentProxy | null>(null);
   const [saved, setSaved] = useState(false);
@@ -32,7 +32,7 @@ export default function BookReader({ slug, title, author }: { slug: string; titl
   // Load the book: from this device if saved, otherwise download and keep a copy.
   useEffect(() => {
     let cancelled = false;
-    let loaded: PDFDocumentProxy | null = null;
+    let loadingTask: { destroy: () => Promise<void> } | null = null;
     (async () => {
       try {
         const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
@@ -44,8 +44,10 @@ export default function BookReader({ slug, title, author }: { slug: string; titl
         rawRef.current = res.data.slice(0);
         setSaved(res.saved);
         if (!res.fromDevice) void bumpStat(slug, "pdf_read");
-        loaded = await pdfjs.getDocument({ data: new Uint8Array(res.data) }).promise;
-        if (cancelled) return void loaded.destroy();
+        const task = pdfjs.getDocument({ data: new Uint8Array(res.data) });
+        loadingTask = task;
+        const loaded = await task.promise;
+        if (cancelled) return;
         const last = Number(window.localStorage.getItem(pageKey(slug)) ?? 1);
         setPage(Math.min(Math.max(1, last || 1), loaded.numPages));
         setDoc(loaded);
@@ -57,7 +59,7 @@ export default function BookReader({ slug, title, author }: { slug: string; titl
     })();
     return () => {
       cancelled = true;
-      void loaded?.destroy();
+      void loadingTask?.destroy();
     };
   }, [slug]);
 
@@ -73,7 +75,7 @@ export default function BookReader({ slug, title, author }: { slug: string; titl
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(([e]) => setBox({ w: e.contentRect.width, h: e.contentRect.height }));
+    const ro = new ResizeObserver(([e]) => e && setBox({ w: e.contentRect.width, h: e.contentRect.height }));
     ro.observe(el);
     return () => ro.disconnect();
   }, [status.kind]);
@@ -141,7 +143,7 @@ export default function BookReader({ slug, title, author }: { slug: string; titl
   };
 
   const pageW = wide && spread.length === 2 ? box.w / 2 : box.w;
-  const atEnd = wide ? spread[spread.length - 1] >= total : page >= total;
+  const atEnd = wide ? (spread[spread.length - 1] ?? total) >= total : page >= total;
 
   return (
     <div className="flex h-full flex-col">
