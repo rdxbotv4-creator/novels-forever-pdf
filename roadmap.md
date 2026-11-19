@@ -15,3 +15,5 @@
 - [ ] Installable app (PWA) with offline support (published site only), incl. offline reading of opened PDFs
 - [ ] Bring over existing reviews, feedback, counts and PDF files from the original project — waiting on the owner's data export
 - [ ] Make the owner's account admin once they sign up on /auth (owner didn't share an email)
+- [x] Copy project from GitHub (kind-companion) into this project with its own Lovable Cloud
+- [ ] Bring over old reviews, feedback, counts and PDFs — waiting on the owner's data export
