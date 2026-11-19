@@ -17,3 +17,6 @@
 - [ ] Make the owner's account admin once they sign up on /auth (owner didn't share an email)
 - [x] Copy project from GitHub (kind-companion) into this project with its own Lovable Cloud
 - [ ] Bring over old reviews, feedback, counts and PDFs — waiting on the owner's data export
+- [x] Kutab Nagri PDFs: declined to download/re-host (authors' copyright); owner uploads PDFs he has rights to
+- [ ] Admin: upload many PDFs at once (makes owner uploads easy)
+- [ ] In-site book reader for PDFs + "save for offline" + installable app (offline in published app only)

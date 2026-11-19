@@ -22,6 +22,7 @@ import { Route as AuthorsIndexRouteImport } from './routes/authors/index'
 import { Route as AuthorsSlugRouteImport } from './routes/authors/$slug'
 import { Route as NovelsIndexRouteImport } from './routes/novels/index'
 import { Route as NovelsSlugRouteImport } from './routes/novels/$slug'
+import { Route as ReadSlugRouteImport } from './routes/read.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -87,6 +88,11 @@ const NovelsSlugRoute = NovelsSlugRouteImport.update({
   path: '/novels/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReadSlugRoute = ReadSlugRouteImport.update({
+  id: '/read/$slug',
+  path: '/read/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/authors/$slug': typeof AuthorsSlugRoute
   '/novels/$slug': typeof NovelsSlugRoute
+  '/read/$slug': typeof ReadSlugRoute
   '/authors/': typeof AuthorsIndexRoute
   '/novels/': typeof NovelsIndexRoute
 }
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/authors/$slug': typeof AuthorsSlugRoute
   '/novels/$slug': typeof NovelsSlugRoute
+  '/read/$slug': typeof ReadSlugRoute
   '/authors': typeof AuthorsIndexRoute
   '/novels': typeof NovelsIndexRoute
 }
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/authors/$slug': typeof AuthorsSlugRoute
   '/novels/$slug': typeof NovelsSlugRoute
+  '/read/$slug': typeof ReadSlugRoute
   '/authors/': typeof AuthorsIndexRoute
   '/novels/': typeof NovelsIndexRoute
 }
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/authors/$slug'
     | '/novels/$slug'
+    | '/read/$slug'
     | '/authors/'
     | '/novels/'
   fileRoutesByTo: FileRoutesByTo
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/authors/$slug'
     | '/novels/$slug'
+    | '/read/$slug'
     | '/authors'
     | '/novels'
   id:
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/authors/$slug'
     | '/novels/$slug'
+    | '/read/$slug'
     | '/authors/'
     | '/novels/'
   fileRoutesById: FileRoutesById
@@ -189,6 +201,7 @@ export interface RootRouteChildren {
   ApiChatRoute: typeof ApiChatRoute
   AuthorsSlugRoute: typeof AuthorsSlugRoute
   NovelsSlugRoute: typeof NovelsSlugRoute
+  ReadSlugRoute: typeof ReadSlugRoute
   AuthorsIndexRoute: typeof AuthorsIndexRoute
   NovelsIndexRoute: typeof NovelsIndexRoute
 }
@@ -286,6 +299,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NovelsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/read/$slug': {
+      id: '/read/$slug'
+      path: '/read/$slug'
+      fullPath: '/read/$slug'
+      preLoaderRoute: typeof ReadSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -311,6 +331,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiChatRoute: ApiChatRoute,
   AuthorsSlugRoute: AuthorsSlugRoute,
   NovelsSlugRoute: NovelsSlugRoute,
+  ReadSlugRoute: ReadSlugRoute,
   AuthorsIndexRoute: AuthorsIndexRoute,
   NovelsIndexRoute: NovelsIndexRoute,
 }
